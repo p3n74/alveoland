@@ -1,0 +1,11 @@
+.git
+.next
+node_modules
+media
+.env
+.env*.local
+*.log
+.cursor
+.vscode
+Dockerfile
+docker-compose.yml

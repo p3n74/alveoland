@@ -1,0 +1,30 @@
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# next.js
+/.next/
+/out/
+/build
+next-env.d.ts
+*.tsbuildinfo
+
+# env and secrets
+.env
+.env*.local
+*.pem
+
+# payload media uploads
+/media
+
+# logs
+npm-debug.log*
+pnpm-debug.log*
+*.log
+
+# misc
+.DS_Store
+/.idea/*
+.vercel
+/coverage

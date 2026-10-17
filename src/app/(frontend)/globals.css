@@ -426,6 +426,10 @@ blockquote {
   overflow: hidden;
 }
 
+.portrait--wide {
+  aspect-ratio: 4 / 3;
+}
+
 .portrait img {
   object-fit: cover;
 }
@@ -1362,4 +1366,175 @@ main:has(> .band:last-child) + .site-footer {
 
 .site-footer__legal p {
   max-width: 720px;
+}
+
+.legal__doc {
+  max-width: 720px;
+  margin-top: 24px;
+  color: var(--meta);
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.legal__doc > * + * {
+  margin-top: 14px;
+}
+
+.legal__title {
+  color: var(--navy);
+}
+
+.legal__updated {
+  font-size: 14px;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+
+.legal__doc h2 {
+  margin-top: 36px;
+  color: var(--navy);
+  font-size: 20px;
+  line-height: 28px;
+}
+
+.legal__doc h3 {
+  margin-top: 24px;
+  color: var(--navy);
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.legal__doc ul,
+.legal__doc ol {
+  padding-left: 22px;
+  display: grid;
+  gap: 6px;
+}
+
+.legal__doc ul {
+  list-style: disc;
+}
+
+.legal__doc ol {
+  list-style: decimal;
+}
+
+.legal__doc a {
+  color: var(--teal);
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.legal-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 24px;
+  margin-top: 16px;
+  font-size: 13px;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+
+.legal__doc + .legal-nav {
+  margin-top: 40px;
+  padding-top: 16px;
+  border-top: 1px solid var(--field);
+}
+
+.legal-nav a {
+  display: inline-block;
+  padding-block: 10px;
+  color: var(--teal);
+  text-decoration: none;
+}
+
+.legal-nav a:hover {
+  text-decoration: underline;
+}
+
+.legal-nav a[aria-current='page'] {
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.site-footer__scam {
+  color: var(--white);
+  font-size: 14px;
+  line-height: 22px;
+  margin-bottom: 12px;
+}
+
+.site-footer__legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  margin-bottom: 8px;
+}
+
+.site-footer__legal-links a {
+  display: inline-block;
+  padding-block: 8px;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+
+.inquire-aside__scam {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(240, 240, 240, 0.2);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.turnstile {
+  min-height: 65px;
+}
+
+html.gate-open {
+  overflow: hidden;
+}
+
+html.gate-ack .entry-gate {
+  display: none;
+}
+
+.entry-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(8, 26, 48, 0.72);
+  overflow-y: auto;
+}
+
+.entry-gate__dialog {
+  width: min(100%, 520px);
+  background: var(--white);
+  color: var(--meta);
+  padding: 28px 24px;
+  display: grid;
+  gap: 16px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+}
+
+.entry-gate__dialog:focus {
+  outline: none;
+}
+
+.entry-gate__dialog:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.entry-gate__title {
+  color: var(--navy);
+  font-size: 22px;
+  line-height: 30px;
+}
+
+.entry-gate__check label a {
+  color: var(--teal);
+  text-underline-offset: 3px;
 }

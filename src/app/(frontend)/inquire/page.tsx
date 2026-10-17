@@ -6,7 +6,8 @@ import { Header } from '@/components/Header'
 import { InquiryForm } from '@/components/InquiryForm'
 import { getChannels } from '@/lib/contact'
 import { getProfile, getProperties } from '@/lib/data'
-import { CORPORATE, INQUIRY_TYPES } from '@/lib/format'
+import { CORPORATE, INQUIRY_TYPES, SALES } from '@/lib/format'
+import { createFormToken, turnstileSiteKey } from '@/lib/inquiry-guard'
 
 export const metadata: Metadata = {
   title: 'Send an inquiry',
@@ -22,7 +23,8 @@ export default async function InquirePage({ searchParams }: Props) {
   const requested = query.intent ?? query.type
   const defaultType = INQUIRY_TYPES.some((t) => t.value === requested) ? requested : undefined
   const channels = getChannels(profile, preset?.name)
-  const hasDirect = channels.length > 0 || Boolean(profile.email)
+  const email = profile.email || SALES.email
+  const name = profile.name || SALES.name
 
   return (
     <>
@@ -43,35 +45,27 @@ export default async function InquirePage({ searchParams }: Props) {
             defaultPropertyId={preset?.id}
             defaultType={defaultType}
             headingId="inquire-title"
-            contactName={profile.name}
+            contactName={name}
             responseHours={profile.responseHours}
+            formToken={createFormToken()}
+            turnstileSiteKey={turnstileSiteKey()}
           />
         </section>
 
-        <aside className="inquire-aside on-dark" aria-label="Other ways to reach us">
-          {hasDirect ? (
-            <div className="inquire-aside__block">
-              <p className="inquire-aside__label">{profile.name ? 'Direct contact' : 'Your sales contact'}</p>
-              {profile.name ? <p className="inquire-aside__name">{profile.name}</p> : null}
-              {profile.name && profile.title ? <p className="inquire-aside__sub">{profile.title} · Alveo Land</p> : null}
-              <ContactChannels channels={channels} tone="light" label="Direct contact channels" />
-              {profile.email ? (
-                <p>
-                  <a href={`mailto:${profile.email}`}>{profile.email}</a>
-                </p>
-              ) : null}
-              {profile.responseHours ? <p className="inquire-aside__note">Reply hours: {profile.responseHours}</p> : null}
-            </div>
-          ) : null}
+        <aside className="inquire-aside on-dark" aria-label="How to reach Luthgarda Pazon">
           <div className="inquire-aside__block">
-            <p className="inquire-aside__label">Corporate desk</p>
+            <p className="inquire-aside__label">Direct contact</p>
+            <p className="inquire-aside__name">{name}</p>
+            {profile.title ? <p className="inquire-aside__sub">{profile.title} · Alveo Land</p> : null}
+            <ContactChannels channels={channels} tone="light" label="Direct contact channels" />
             <p>
-              <a href={CORPORATE.hotlineHref}>{CORPORATE.hotline}</a>
+              <a href={`mailto:${email}`}>{email}</a>
             </p>
-            <p>
-              <a href={`mailto:${CORPORATE.email}`}>{CORPORATE.email}</a>
+            {profile.responseHours ? <p className="inquire-aside__note">Reply hours: {profile.responseHours}</p> : null}
+            <p className="inquire-aside__note">Alveo Land office: {CORPORATE.address}</p>
+            <p className="inquire-aside__scam">
+              Avoid scams. She will only reply from {SALES.email}. Payment goes only to Alveo Land official accounts.
             </p>
-            <p className="inquire-aside__note">{CORPORATE.address}</p>
           </div>
         </aside>
       </main>

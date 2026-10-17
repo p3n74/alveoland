@@ -11,6 +11,20 @@ if [ -w /etc/hosts ]; then
   cat /tmp/hosts.new > /etc/hosts
 fi
 
+# The seed writes portrait files on the machine that runs it. Copy the
+# production filenames into the mounted media volume when they are missing.
+fetch() {
+  url="$1"
+  dest="$2"
+  if [ ! -s "$dest" ]; then
+    curl -fsSL "$url" -o "$dest"
+    chown nextjs:nodejs "$dest"
+  fi
+}
+base="https://raw.githubusercontent.com/p3n74/alveoland/main/src/seed/photos"
+fetch "$base/luthgarda-pazon-portrait.jpg" /app/media/luthgarda-pazon-portrait-1.jpg
+fetch "$base/luthgarda-pazon-site.jpg" /app/media/luthgarda-pazon-site-1.jpg
+
 export HOSTNAME=0.0.0.0
 export PORT="${PORT:-3000}"
 exec su-exec nextjs:nodejs node server.js

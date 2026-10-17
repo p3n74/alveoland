@@ -16,6 +16,10 @@ One Dockerfile application plus one Coolify PostgreSQL database.
 | `PAYLOAD_SECRET` | | yes | Long random string, unique to production. Changing it logs everyone out. |
 | `NEXT_PUBLIC_SERVER_URL` | **yes** | yes | Public origin, no trailing slash, e.g. `https://example.com`. Next inlines it at build, so mark it as a build variable in Coolify. |
 | `PAYLOAD_MEDIA_DIR` | | optional | Defaults to `/app/media` in the image. Keep it equal to the volume mount. |
+| `TURNSTILE_SITE_KEY` | | optional | Cloudflare Turnstile site key for the inquiry form. Not `NEXT_PUBLIC_`; the server passes it to the form. |
+| `TURNSTILE_SECRET_KEY` | | optional | Turnstile secret, used only for server-side siteverify. Set both keys or neither: with neither the widget is off; with only one the form refuses submissions. |
+
+`PAYLOAD_SECRET` also signs the inquiry form timer and hashes rate-limit keys (table `inquiry_guard`, rows kept one hour). Security headers come from `next.config.ts`; HSTS is sent only when `NEXT_PUBLIC_SERVER_URL` starts with `https` at build time. The Content-Security-Policy is not applied to `/admin`.
 
 Optional later: an SMTP adapter for inquiry emails (not wired yet; inquiries are saved in the admin under **Inbox → Inquiries**).
 

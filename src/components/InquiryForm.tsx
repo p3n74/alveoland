@@ -6,6 +6,7 @@ import { submitInquiry, type InquiryField, type InquiryState } from '@/app/(fron
 import { INQUIRY_TYPES, PREFERRED_CHANNELS, VISIT_MODES, type InquiryTypeValue } from '@/lib/format'
 import { Arrow } from './Arrow'
 import { INTENT_EVENT } from './IntentLink'
+import { TurnstileWidget } from './TurnstileWidget'
 
 type Option = { id: number; name: string }
 
@@ -17,6 +18,8 @@ type Props = {
   headingId?: string
   contactName?: string | null
   responseHours?: string | null
+  formToken: string
+  turnstileSiteKey?: string
 }
 
 const initial: InquiryState = { status: 'idle', key: 0 }
@@ -32,6 +35,8 @@ export function InquiryForm({
   headingId,
   contactName,
   responseHours,
+  formToken,
+  turnstileSiteKey,
 }: Props) {
   const [state, action, pending] = useActionState(submitInquiry, initial)
   const [dismissed, setDismissed] = useState<number | null>(null)
@@ -277,8 +282,11 @@ export function InquiryForm({
           {...describe('privacyConsent')}
         />
         <label htmlFor="privacyConsent">
-          I agree that the details above may be used to reply to this inquiry, in line with the Data Privacy Act of 2012
-          (RA 10173). *
+          I agree that the details in this form may be used to reply to this inquiry. Read the{' '}
+          <a href="/data-privacy" target="_blank" rel="noopener">
+            Data Privacy Notice
+          </a>
+          .
         </label>
       </div>
       {errorText('privacyConsent')}
@@ -287,6 +295,9 @@ export function InquiryForm({
         <label htmlFor="company">Company</label>
         <input id="company" name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
+
+      <input type="hidden" name="formToken" value={formToken} />
+      {turnstileSiteKey ? <TurnstileWidget siteKey={turnstileSiteKey} /> : null}
 
       <div className="form__submit">
         <button type="submit" className="btn" disabled={pending}>

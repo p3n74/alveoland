@@ -1,11 +1,14 @@
 'use server'
 
+import { headers } from 'next/headers'
 import { z } from 'zod'
 
 import { getPayloadClient } from '@/lib/data'
+import { checkInquiryRate, clientIp, turnstileConfig, verifyFormToken, verifyTurnstile } from '@/lib/inquiry-guard'
 import {
   INQUIRY_TYPES,
   PREFERRED_CHANNELS,
+  SALES,
   VISIT_MODES,
   type InquiryTypeValue,
   type PreferredChannelValue,
@@ -36,6 +39,8 @@ export type InquiryState = {
   channel?: PreferredChannelValue
   key: number
 }
+
+const SEND_ERROR = `The inquiry could not be sent just now. Try again, or email ${SALES.email}.`
 
 const oneOf = (values: readonly string[], message: string) =>
   z.string().refine((v) => v === '' || values.includes(v), message)
@@ -122,6 +127,32 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
   }
 
   const raw = Object.fromEntries(FIELDS.map((f) => [f, text(formData, f)])) as Record<(typeof FIELDS)[number], string>
+  const sendError: InquiryState = { status: 'error', message: SEND_ERROR, values: raw, key }
+
+  try {
+    const payload = await getPayloadClient()
+    const { allowed } = await checkInquiryRate(payload, {
+      ip: clientIp((await headers()).get('x-forwarded-for')),
+      email: raw.email,
+      phone: raw.phone,
+    })
+    if (!allowed) {
+      return { status: 'error', message: 'Please wait a while before sending another inquiry.', values: raw, key }
+    }
+  } catch (error) {
+    console.error('Inquiry rate check failed', error instanceof Error ? error.message : 'unknown error')
+    return sendError
+  }
+
+  if (!verifyFormToken(text(formData, 'formToken'))) {
+    return { status: 'error', message: 'Reload the page and send the form again.', values: raw, key }
+  }
+
+  const turnstile = turnstileConfig()
+  if (turnstile.mode === 'misconfigured') return sendError
+  if (turnstile.mode === 'on' && !(await verifyTurnstile(turnstile.secretKey, text(formData, 'cf-turnstile-response')))) {
+    return sendError
+  }
 
   const parsed = schema.safeParse(raw)
   if (!parsed.success) {
@@ -174,12 +205,7 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
     })
   } catch (error) {
     console.error('Inquiry could not be saved', error)
-    return {
-      status: 'error',
-      message: 'The inquiry could not be sent just now. Try again, or call the corporate desk.',
-      values: raw,
-      key,
-    }
+    return sendError
   }
 
   return {

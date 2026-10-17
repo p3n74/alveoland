@@ -28,11 +28,13 @@ The inquiry checkbox is separate from the first-visit acknowledgement. Ticking i
 
 The form has a hidden field meant to catch automated submissions. Leave it blank. If it is filled in, the submission is not saved.
 
+A separate one-hour hash can limit repeated submits, and Cloudflare Turnstile may later receive a token to check a submit. Both are described in the [Data Privacy Notice](/data-privacy). Neither is written on the inquiry. Turnstile is off while its keys are unset.
+
 ## Legal basis
 
 She uses the details in an inquiry because you consent, by ticking the inquiry checkbox, to their use in replying to that inquiry.
 
-She relies on legitimate interest only to keep the public pages available and to drop automated form fills that are not real inquiries, because that protects the channel visitors use to write to her and does not build a profile of people who only browse.
+She relies on legitimate interest only to keep the public pages available, to drop automated form fills that are not real inquiries, and to keep a one-hour hash that limits repeated submissions, because that protects the channel visitors use to write to her and does not build a profile of people who only browse.
 
 ## Who else handles the data
 

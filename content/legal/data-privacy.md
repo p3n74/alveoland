@@ -40,7 +40,15 @@ The legal basis is your consent. The inquiry is saved only if you tick the box a
 
 If you do not tick the box, the form is not accepted. You may still email her.
 
-She relies on legitimate interest only to discard automated submissions that fill the hidden field, because that keeps the inquiry channel usable for real visitors, and those submissions are not stored.
+She relies on legitimate interest only to discard automated submissions that fill the hidden field, and to keep the one-hour hashes below, because those checks keep the inquiry channel usable for real visitors. Hidden-field submissions are not stored.
+
+## One-hour abuse hashes
+
+When the form is submitted, the site stores an HMAC hash of the IP address. If an email or a phone number was entered, it stores an HMAC hash of that as well. It does not store the raw IP address. These hashes are not saved on the inquiry record. They are kept for at most one hour, then deleted. The legal basis is legitimate interest: a short-lived hash slows repeated or automated submits without keeping the address or number itself.
+
+## Cloudflare Turnstile
+
+Cloudflare Turnstile is not running, because its keys are not set. If both the site key and the secret key are set later, the form will send a token to Cloudflare Turnstile so Cloudflare can check the submit. That token is not stored on the inquiry. Cloudflare may process the token outside the Philippines. Until both keys are set, Cloudflare does not receive a token from this form.
 
 ## How long she keeps an inquiry
 

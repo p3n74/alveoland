@@ -76,10 +76,12 @@ export function slugify(input: string) {
     .replace(/^-+|-+$/g, '')
 }
 
+export const SALES = {
+  name: 'Luthgarda Pazon',
+  email: 'luthgarda@citadel-codex.com',
+}
+
 export const CORPORATE = {
-  hotline: '(+632) 8848 5000',
-  hotlineHref: 'tel:+63288485000',
-  email: 'info@alveoland.com',
   address: 'Alveo Corporate Center, 728 28th Street, Bonifacio Global City, 1634 Taguig City',
 }
 

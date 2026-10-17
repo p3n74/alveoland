@@ -17,7 +17,7 @@ export function Header({ variant, current, showRecord = false }: Props) {
           <Image src={ALVEO_LOGO} alt="Alveo" width={104} height={28} priority unoptimized />
         </Link>
         <nav aria-label="Main" className="site-nav">
-          <Link href="/#guide">The guide</Link>
+          <Link href="/#meet">Meet Luthgarda</Link>
           {showRecord ? <Link href="/#record">Record</Link> : null}
           <Link href="/properties" aria-current={current === 'properties' ? 'page' : undefined}>
             Properties

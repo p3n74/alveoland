@@ -12,7 +12,8 @@ import { IntentLink } from '@/components/IntentLink'
 import { VerifyBlock } from '@/components/VerifyBlock'
 import { getChannels } from '@/lib/contact'
 import { getProfile, getPropertyBySlug, paragraphs, propertyFrames } from '@/lib/data'
-import { balanceModeLabel, formatDate, INQUIRY_TYPES, statusLabel, typeLabel } from '@/lib/format'
+import { balanceModeLabel, formatDate, INQUIRY_TYPES, SALES, statusLabel, typeLabel } from '@/lib/format'
+import { createFormToken, turnstileSiteKey } from '@/lib/inquiry-guard'
 
 type Props = {
   params: Promise<{ slug: string }>
@@ -240,14 +241,18 @@ export default async function PropertyPage({ params, searchParams }: Props) {
           <h2 id="inquire-title" className="form-title">
             Inquire about {property.name}
           </h2>
-          <p className="body">Leave your details and a short note. The corporate desk remains available below.</p>
+          <p className="body">
+            Leave your details and a short note. {profile.name || SALES.name} will reply by email.
+          </p>
           <ContactChannels channels={channels} label={`Contact about ${property.name}`} />
           <InquiryForm
             fixedProperty={{ id: property.id, name: property.name }}
             defaultType={defaultType}
             headingId="inquire-title"
-            contactName={profile.name}
+            contactName={profile.name || SALES.name}
             responseHours={profile.responseHours}
+            formToken={createFormToken()}
+            turnstileSiteKey={turnstileSiteKey()}
           />
         </section>
       </main>

@@ -639,7 +639,14 @@ export interface Profile {
   id: number;
   name?: string | null;
   title?: string | null;
+  /**
+   * Head-and-shoulders photo.
+   */
   portrait?: (number | null) | Media;
+  /**
+   * A second photo, shown beside the portrait.
+   */
+  showroomPhoto?: (number | null) | Media;
   /**
    * Short first-person introduction. Separate paragraphs with a blank line.
    */
@@ -690,6 +697,7 @@ export interface ProfileSelect<T extends boolean = true> {
   name?: T;
   title?: T;
   portrait?: T;
+  showroomPhoto?: T;
   intro?: T;
   mobileE164?: T;
   email?: T;

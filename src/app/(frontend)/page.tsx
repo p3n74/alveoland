@@ -19,6 +19,7 @@ export default async function HomePage() {
   const { awards, testimonials, salesRecords } = credibility
   const hasRecord = awards.length + testimonials.length + salesRecords.length > 0
   const portrait = isMedia(profile.portrait) && profile.portrait.url ? profile.portrait : null
+  const showroom = isMedia(profile.showroomPhoto) && profile.showroomPhoto.url ? profile.showroomPhoto : null
   const channels = getChannels(profile)
 
   const cities = (profile.cities ?? []).map((c) => c.city).filter(Boolean)
@@ -60,11 +61,11 @@ export default async function HomePage() {
       </section>
 
       <main id="main">
-        <section id="guide" className="section container" aria-labelledby="guide-title">
-          <h2 id="guide-title" className="section-label">
-            The guide
+        <section id="meet" className="section container" aria-labelledby="meet-title">
+          <h2 id="meet-title" className="section-label">
+            Meet Luthgarda
           </h2>
-          <div className={`guide${facts.length > 0 || portrait ? ' guide--split' : ''}`}>
+          <div className={`guide${facts.length > 0 || portrait || showroom ? ' guide--split' : ''}`}>
             <div className="guide__copy">
               {intro.slice(1).map((p, i) => (
                 <p key={i} className="body">
@@ -85,13 +86,23 @@ export default async function HomePage() {
                 before you reserve.
               </p>
             </div>
-            {facts.length > 0 || portrait ? (
+            {facts.length > 0 || portrait || showroom ? (
               <aside className="guide__aside">
                 {portrait ? (
                   <div className="portrait">
                     <Image
                       src={portrait.url as string}
                       alt={portrait.alt || profile.name || 'Portrait'}
+                      fill
+                      sizes="(min-width: 860px) 360px, 100vw"
+                    />
+                  </div>
+                ) : null}
+                {showroom ? (
+                  <div className="portrait portrait--wide">
+                    <Image
+                      src={showroom.url as string}
+                      alt={showroom.alt || profile.name || 'Showroom photo'}
                       fill
                       sizes="(min-width: 860px) 360px, 100vw"
                     />

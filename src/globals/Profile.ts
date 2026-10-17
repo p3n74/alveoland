@@ -20,7 +20,24 @@ export const Profile: GlobalConfig = {
         { name: 'title', type: 'text', defaultValue: 'Senior Sales' },
       ],
     },
-    { name: 'portrait', type: 'upload', relationTo: 'media' },
+    {
+      type: 'row',
+      fields: [
+        {
+          name: 'portrait',
+          type: 'upload',
+          relationTo: 'media',
+          admin: { description: 'Head-and-shoulders photo.' },
+        },
+        {
+          name: 'showroomPhoto',
+          label: 'Showroom photo',
+          type: 'upload',
+          relationTo: 'media',
+          admin: { description: 'A second photo, shown beside the portrait.' },
+        },
+      ],
+    },
     {
       name: 'intro',
       type: 'textarea',

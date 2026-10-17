@@ -38,4 +38,6 @@ USER nextjs
 EXPOSE 3000
 VOLUME ["/app/media"]
 
-CMD ["node", "server.js"]
+# Docker sets HOSTNAME to the container id, which makes Next bind somewhere
+# other than localhost. The health check calls localhost:3000.
+CMD ["sh", "-c", "HOSTNAME=0.0.0.0 node server.js"]

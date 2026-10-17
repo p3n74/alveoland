@@ -28,16 +28,17 @@ ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 ENV PAYLOAD_MEDIA_DIR=/app/media
 
-RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
+RUN apk add --no-cache curl su-exec \
+  && addgroup --system --gid 1001 nodejs \
+  && adduser --system --uid 1001 nextjs
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-RUN mkdir -p /app/media && chown nextjs:nodejs /app/media
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+  && mkdir -p /app/media && chown nextjs:nodejs /app/media
 
-USER nextjs
 EXPOSE 3000
 VOLUME ["/app/media"]
 
-# Docker sets HOSTNAME to the container id, which makes Next bind somewhere
-# other than localhost. The health check calls localhost:3000.
-CMD ["sh", "-c", "HOSTNAME=0.0.0.0 node server.js"]
+ENTRYPOINT ["docker-entrypoint.sh"]

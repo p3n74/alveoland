@@ -1,43 +1,37 @@
 import Link from 'next/link'
 
 import type { Profile } from '@/payload-types'
+import { getChannels } from '@/lib/contact'
 import { CORPORATE } from '@/lib/format'
+import { ContactChannels } from './ContactChannels'
 
 export function Footer({ profile }: { profile: Profile | null }) {
-  const direct = [
-    profile?.phone && {
-      label: 'Mobile',
-      value: profile.phone,
-      href: `tel:${profile.phone.replace(/[^\d+]/g, '')}`,
-    },
-    profile?.email && { label: 'Email', value: profile.email, href: `mailto:${profile.email}` },
-    profile?.viber && {
-      label: 'Viber',
-      value: profile.viber,
-      href: `viber://chat?number=${encodeURIComponent(profile.viber.replace(/[^\d+]/g, ''))}`,
-    },
-    profile?.messengerUrl && { label: 'Messenger', value: 'Send a message', href: profile.messengerUrl },
-  ].filter(Boolean) as { label: string; value: string; href: string }[]
+  const channels = getChannels(profile)
+  const hasDirect = channels.length > 0 || Boolean(profile?.email)
 
   return (
     <footer className="site-footer on-dark">
       <div className="container site-footer__grid">
-        {direct.length > 0 ? (
+        {hasDirect ? (
           <section aria-labelledby="footer-direct">
             <h2 id="footer-direct" className="site-footer__title">
               {profile?.name || 'Direct contact'}
             </h2>
             {profile?.name && profile.title ? <p className="site-footer__sub">{profile.title} · Alveo Land</p> : null}
-            <dl className="site-footer__list">
-              {direct.map((item) => (
-                <div key={item.label}>
-                  <dt>{item.label}</dt>
+            <ContactChannels channels={channels} tone="light" label="Direct contact channels" />
+            {profile?.email ? (
+              <dl className="site-footer__list">
+                <div>
+                  <dt>Email</dt>
                   <dd>
-                    <a href={item.href}>{item.value}</a>
+                    <a href={`mailto:${profile.email}`}>{profile.email}</a>
                   </dd>
                 </div>
-              ))}
-            </dl>
+              </dl>
+            ) : null}
+            {profile?.responseHours ? (
+              <p className="site-footer__address">Reply hours: {profile.responseHours}</p>
+            ) : null}
           </section>
         ) : null}
 

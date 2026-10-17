@@ -20,7 +20,7 @@ export function Gallery({ frames, name }: { frames: Frame[]; name: string }) {
   return (
     <div className="gallery">
       <div className="gallery__main">
-        <Image src={frame.src} alt={frame.alt} fill priority sizes="(min-width: 1200px) 1200px, 100vw" />
+        <Image src={frame.src} alt={frame.alt} fill priority sizes="(min-width: 1088px) 960px, calc(100vw - 40px)" />
       </div>
       {frames.length > 1 ? (
         <div className="gallery__thumbs" role="group" aria-label="Photos">

@@ -145,9 +145,9 @@ export interface Property {
   city: string;
   type: 'condo' | 'residential-lot' | 'commercial-lot';
   /**
-   * e.g. Pre-selling, Ready for occupancy
+   * Leave empty if the current status is not confirmed.
    */
-  status?: string | null;
+  status?: ('pre-selling' | 'under-construction' | 'ready-for-occupancy' | 'sold-out') | null;
   /**
    * e.g. About 26–156 sqm
    */
@@ -166,6 +166,49 @@ export interface Property {
    */
   heroImageUrl?: string | null;
   gallery?: (number | Media)[] | null;
+  /**
+   * e.g. ₱50,000
+   */
+  reservationFee?: string | null;
+  /**
+   * e.g. Q4 2029
+   */
+  targetTurnover?: string | null;
+  termsAsOf?: string | null;
+  paymentSchemes?:
+    | {
+        /**
+         * e.g. Spot down payment
+         */
+        label: string;
+        downPaymentPercent?: number | null;
+        downPaymentMonths?: number | null;
+        balancePercent?: number | null;
+        balanceMode?: ('cash' | 'bank' | 'pag-ibig' | 'in-house') | null;
+        note?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  unitTypes?:
+    | {
+        /**
+         * e.g. 1 bedroom
+         */
+        label: string;
+        /**
+         * e.g. 52–60 sqm
+         */
+        areaRange?: string | null;
+        priceFrom?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  location?: string | null;
+  /**
+   * Google Maps link
+   */
+  mapUrl?: string | null;
+  dhsudLtsNumber?: string | null;
   /**
    * Show on the landing page.
    */
@@ -205,10 +248,18 @@ export interface Inquiry {
   name: string;
   email?: string | null;
   phone?: string | null;
-  inquiryType: 'property-information' | 'schedule-viewing' | 'payment-terms' | 'general';
+  preferredChannel?: ('call' | 'viber' | 'whatsapp' | 'messenger' | 'email') | null;
+  inquiryType: 'payment-terms' | 'viewing' | 'similar-units' | 'property-information' | 'general';
   property?: (number | null) | Property;
+  visitMode?: ('on-site' | 'video-call') | null;
+  preferredDate?: string | null;
+  buyerLocation?: string | null;
+  isAbroad?: boolean | null;
+  bestTimeToReach?: string | null;
   message?: string | null;
-  status: 'new' | 'contacted' | 'closed';
+  privacyConsent?: boolean | null;
+  privacyConsentAt?: string | null;
+  status: 'new' | 'contacted' | 'scheduled' | 'visited' | 'closed';
   updatedAt: string;
   createdAt: string;
 }
@@ -228,7 +279,7 @@ export interface Award {
   createdAt: string;
 }
 /**
- * Publish only with the client’s permission.
+ * Shown on the site only when Published and Consent on file are both ticked.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "testimonials".
@@ -242,6 +293,10 @@ export interface Testimonial {
    */
   clientContext?: string | null;
   published?: boolean | null;
+  /**
+   * Tick only when the client’s written permission is on file.
+   */
+  consentOnFile?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -403,6 +458,31 @@ export interface PropertiesSelect<T extends boolean = true> {
   summary?: T;
   heroImageUrl?: T;
   gallery?: T;
+  reservationFee?: T;
+  targetTurnover?: T;
+  termsAsOf?: T;
+  paymentSchemes?:
+    | T
+    | {
+        label?: T;
+        downPaymentPercent?: T;
+        downPaymentMonths?: T;
+        balancePercent?: T;
+        balanceMode?: T;
+        note?: T;
+        id?: T;
+      };
+  unitTypes?:
+    | T
+    | {
+        label?: T;
+        areaRange?: T;
+        priceFrom?: T;
+        id?: T;
+      };
+  location?: T;
+  mapUrl?: T;
+  dhsudLtsNumber?: T;
   featured?: T;
   order?: T;
   updatedAt?: T;
@@ -416,9 +496,17 @@ export interface InquiriesSelect<T extends boolean = true> {
   name?: T;
   email?: T;
   phone?: T;
+  preferredChannel?: T;
   inquiryType?: T;
   property?: T;
+  visitMode?: T;
+  preferredDate?: T;
+  buyerLocation?: T;
+  isAbroad?: T;
+  bestTimeToReach?: T;
   message?: T;
+  privacyConsent?: T;
+  privacyConsentAt?: T;
   status?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -444,6 +532,7 @@ export interface TestimonialsSelect<T extends boolean = true> {
   clientName?: T;
   clientContext?: T;
   published?: T;
+  consentOnFile?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -555,16 +644,28 @@ export interface Profile {
    * Short first-person introduction. Separate paragraphs with a blank line.
    */
   intro?: string | null;
-  phone?: string | null;
+  /**
+   * e.g. +639171234567. Used for Call, Viber, and WhatsApp.
+   */
+  mobileE164?: string | null;
   email?: string | null;
+  viberEnabled?: boolean | null;
+  whatsappEnabled?: boolean | null;
   /**
-   * Number in international format, e.g. +639171234567
+   * The part after m.me/, e.g. your.page
    */
+  messengerUsername?: string | null;
+  /**
+   * e.g. Mon–Sat, 9am–7pm PH time
+   */
+  responseHours?: string | null;
+  phone?: string | null;
   viber?: string | null;
-  /**
-   * e.g. https://m.me/your.page
-   */
   messengerUrl?: string | null;
+  prcAccreditationNo?: string | null;
+  prcValidUntil?: string | null;
+  supervisingBrokerName?: string | null;
+  supervisingBrokerPrcNo?: string | null;
   cities?:
     | {
         city: string;
@@ -590,10 +691,19 @@ export interface ProfileSelect<T extends boolean = true> {
   title?: T;
   portrait?: T;
   intro?: T;
-  phone?: T;
+  mobileE164?: T;
   email?: T;
+  viberEnabled?: T;
+  whatsappEnabled?: T;
+  messengerUsername?: T;
+  responseHours?: T;
+  phone?: T;
   viber?: T;
   messengerUrl?: T;
+  prcAccreditationNo?: T;
+  prcValidUntil?: T;
+  supervisingBrokerName?: T;
+  supervisingBrokerPrcNo?: T;
   cities?:
     | T
     | {

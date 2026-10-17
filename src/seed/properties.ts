@@ -13,7 +13,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     slug: 'patio-suites-abreeza',
     city: 'Davao',
     type: 'condo',
-    status: 'Pre-selling',
+    status: 'pre-selling',
     area: 'About 26–156 sqm',
     priceFrom: 'Starts at ₱8,232,000',
     summary:
@@ -27,7 +27,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     slug: 'mergent-residences',
     city: 'Makati',
     type: 'condo',
-    status: 'Pre-selling',
+    status: 'pre-selling',
     area: 'About 31–106 sqm',
     priceFrom: 'Starts at ₱10,432,050',
     summary:
@@ -41,7 +41,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     slug: 'sentrove',
     city: 'Quezon City',
     type: 'condo',
-    status: 'Public listing',
+    status: null,
     area: 'About 30–279 sqm',
     priceFrom: 'Starts at ₱8,300,000',
     summary:
@@ -55,7 +55,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     slug: 'callisto',
     city: 'Makati',
     type: 'condo',
-    status: 'Ready for occupancy',
+    status: 'ready-for-occupancy',
     area: 'About 30–60 sqm',
     priceFrom: '',
     summary:
@@ -69,7 +69,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     slug: 'astela',
     city: 'Makati',
     type: 'condo',
-    status: 'Pre-selling',
+    status: 'pre-selling',
     area: 'About 33–126 sqm',
     priceFrom: '₱11 million to ₱48.5 million',
     summary: 'Lower-density tower at Circuit Makati. The public condos archive lists it as pre-selling.',
@@ -82,7 +82,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     slug: 'westborough',
     city: 'Cavite',
     type: 'commercial-lot',
-    status: 'Sold out',
+    status: 'sold-out',
     area: 'Commercial lots',
     priceFrom: '',
     summary:
@@ -96,7 +96,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     slug: 'hillside-ridge',
     city: 'Cavite',
     type: 'residential-lot',
-    status: 'Ready for turnover',
+    status: 'ready-for-occupancy',
     area: 'Residential lots',
     priceFrom: '₱11.4 million to ₱30.8 million',
     summary:
@@ -110,7 +110,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     slug: 'south-palmgrove',
     city: 'Batangas',
     type: 'residential-lot',
-    status: 'Pre-selling',
+    status: 'pre-selling',
     area: 'Lots about 200–499 sqm',
     priceFrom: '₱6.5 million to ₱18.6 million',
     summary:
@@ -124,7 +124,7 @@ export const SEED_PROPERTIES: SeedProperty[] = [
     slug: 'cerca',
     city: 'Las Piñas–Alabang',
     type: 'condo',
-    status: 'District',
+    status: null,
     area: '6.6 hectares',
     priceFrom: '',
     summary:

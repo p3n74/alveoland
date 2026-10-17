@@ -2,8 +2,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { Arrow } from '@/components/Arrow'
+import { ContactBar } from '@/components/ContactChannels'
 import { Header } from '@/components/Header'
-import { PropertyCard } from '@/components/PropertyCard'
+import { FEATURED_CARD_SIZES, PropertyCard } from '@/components/PropertyCard'
+import { VerifyBlock } from '@/components/VerifyBlock'
+import { getChannels } from '@/lib/contact'
 import { getCredibility, getProfile, getProperties, isMedia, paragraphs, toCard } from '@/lib/data'
 import { HERO_IMAGE } from '@/lib/format'
 
@@ -16,6 +19,7 @@ export default async function HomePage() {
   const { awards, testimonials, salesRecords } = credibility
   const hasRecord = awards.length + testimonials.length + salesRecords.length > 0
   const portrait = isMedia(profile.portrait) && profile.portrait.url ? profile.portrait : null
+  const channels = getChannels(profile)
 
   const cities = (profile.cities ?? []).map((c) => c.city).filter(Boolean)
   const accreditation = (profile.accreditation ?? []).map((a) => a.item).filter(Boolean)
@@ -108,6 +112,10 @@ export default async function HomePage() {
           </div>
         </section>
 
+        <div className="container section">
+          <VerifyBlock profile={profile} />
+        </div>
+
         {hasRecord ? (
           <section id="record" className="section container" aria-labelledby="record-title">
             <h2 id="record-title" className="section-label">
@@ -177,7 +185,7 @@ export default async function HomePage() {
             </h2>
             <div className="card-grid card-grid--featured">
               {featured.map((p) => (
-                <PropertyCard key={p.slug} property={p} />
+                <PropertyCard key={p.slug} property={p} sizes={FEATURED_CARD_SIZES} />
               ))}
             </div>
             <Link href="/properties" className="text-btn section__more">
@@ -200,6 +208,7 @@ export default async function HomePage() {
           </div>
         </section>
       </main>
+      <ContactBar channels={channels} />
     </>
   )
 }

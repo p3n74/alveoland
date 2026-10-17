@@ -1,6 +1,12 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, FieldAccess, Where } from 'payload'
 
 import { anyone, isAdmin } from '../access'
+
+const adminField: FieldAccess = ({ req }) => Boolean(req.user)
+
+const publicTestimonials: Where = {
+  and: [{ published: { equals: true } }, { consentOnFile: { equals: true } }],
+}
 
 const adminWrite = {
   create: isAdmin,
@@ -32,10 +38,10 @@ export const Testimonials: CollectionConfig = {
     useAsTitle: 'clientName',
     defaultColumns: ['clientName', 'clientContext', 'published'],
     group: 'Credibility',
-    description: 'Publish only with the client’s permission.',
+    description: 'Shown on the site only when Published and Consent on file are both ticked.',
   },
   access: {
-    read: ({ req }) => (req.user ? true : { published: { equals: true } }),
+    read: ({ req }) => (req.user ? true : publicTestimonials),
     ...adminWrite,
   },
   fields: [
@@ -47,6 +53,13 @@ export const Testimonials: CollectionConfig = {
       admin: { description: 'e.g. Buyer, Patio Suites Abreeza, Davao' },
     },
     { name: 'published', type: 'checkbox', defaultValue: false, admin: { position: 'sidebar' } },
+    {
+      name: 'consentOnFile',
+      type: 'checkbox',
+      defaultValue: false,
+      access: { read: adminField, create: adminField, update: adminField },
+      admin: { position: 'sidebar', description: 'Tick only when the client’s written permission is on file.' },
+    },
   ],
 }
 

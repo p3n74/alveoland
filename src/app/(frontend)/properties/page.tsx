@@ -2,9 +2,11 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
+import { ContactBar } from '@/components/ContactChannels'
 import { Header } from '@/components/Header'
 import { SuiteGrid } from '@/components/SuiteGrid'
-import { getProperties, toCard } from '@/lib/data'
+import { getChannels } from '@/lib/contact'
+import { getProfile, getProperties, toCard } from '@/lib/data'
 
 export const metadata: Metadata = {
   title: 'Properties',
@@ -13,7 +15,8 @@ export const metadata: Metadata = {
 }
 
 export default async function PropertiesPage() {
-  const cards = (await getProperties()).map(toCard)
+  const [properties, profile] = await Promise.all([getProperties(), getProfile()])
+  const cards = properties.map(toCard)
 
   return (
     <>
@@ -33,6 +36,7 @@ export default async function PropertiesPage() {
           <SuiteGrid properties={cards} />
         </Suspense>
       </main>
+      <ContactBar channels={getChannels(profile)} />
     </>
   )
 }

@@ -27,17 +27,69 @@ export const Profile: GlobalConfig = {
       admin: { description: 'Short first-person introduction. Separate paragraphs with a blank line.' },
     },
     {
-      type: 'row',
+      type: 'collapsible',
+      label: 'Contact channels',
+      admin: { description: 'Only filled and enabled channels appear on the site.' },
       fields: [
-        { name: 'phone', type: 'text' },
-        { name: 'email', type: 'email' },
+        {
+          type: 'row',
+          fields: [
+            {
+              name: 'mobileE164',
+              label: 'Mobile (international format)',
+              type: 'text',
+              admin: { description: 'e.g. +639171234567. Used for Call, Viber, and WhatsApp.' },
+              validate: (value: string | null | undefined) =>
+                !value || /^\+[1-9]\d{7,14}$/.test(value) || 'Use + then country code and number, no spaces.',
+            },
+            { name: 'email', type: 'email' },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            { name: 'viberEnabled', label: 'Show Viber', type: 'checkbox', defaultValue: false },
+            { name: 'whatsappEnabled', label: 'Show WhatsApp', type: 'checkbox', defaultValue: false },
+          ],
+        },
+        {
+          name: 'messengerUsername',
+          type: 'text',
+          admin: { description: 'The part after m.me/, e.g. your.page' },
+        },
+        {
+          name: 'responseHours',
+          type: 'text',
+          admin: { description: 'e.g. Mon–Sat, 9am–7pm PH time' },
+        },
+        {
+          type: 'row',
+          fields: [
+            { name: 'phone', label: 'Phone (display, legacy)', type: 'text' },
+            { name: 'viber', label: 'Viber number (legacy)', type: 'text' },
+            { name: 'messengerUrl', label: 'Messenger URL (legacy)', type: 'text' },
+          ],
+        },
       ],
     },
     {
-      type: 'row',
+      type: 'collapsible',
+      label: 'Accreditation for buyers to verify',
       fields: [
-        { name: 'viber', type: 'text', admin: { description: 'Number in international format, e.g. +639171234567' } },
-        { name: 'messengerUrl', type: 'text', admin: { description: 'e.g. https://m.me/your.page' } },
+        {
+          type: 'row',
+          fields: [
+            { name: 'prcAccreditationNo', label: 'PRC accreditation no.', type: 'text' },
+            { name: 'prcValidUntil', label: 'PRC valid until', type: 'date', admin: { date: { pickerAppearance: 'dayOnly' } } },
+          ],
+        },
+        {
+          type: 'row',
+          fields: [
+            { name: 'supervisingBrokerName', type: 'text' },
+            { name: 'supervisingBrokerPrcNo', label: 'Supervising broker PRC no.', type: 'text' },
+          ],
+        },
       ],
     },
     {

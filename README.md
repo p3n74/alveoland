@@ -19,4 +19,18 @@ pnpm seed                     # nine public Alveo properties + first admin (idem
 - **Awards, Testimonials, Sales records**: real entries only. The landing page hides the Record section until one of them has an entry; testimonials appear only when published.
 - **Inquiries**: written by the public form through a server action. Admin-only.
 
+- **Profile contact and accreditation**: mobile (+63 format), Viber/WhatsApp toggles, Messenger username, reply hours, PRC accreditation, supervising broker. Contact buttons and the mobile contact bar appear only for filled and enabled channels.
+- **Property buying basics**: reservation fee, payment schemes, turnover, unit types, location, map link, DHSUD license to sell, terms-as-of date. Empty values show an “Ask me” link that presets the inquiry to payment terms.
+- Testimonials need both **Published** and **Consent on file** to appear.
+
 See `DEPLOY.md` for Coolify and migrations, and `branding-kit.md` for the visual rules.
+
+## Next
+
+Deferred, not built yet:
+
+- OFW buying guide page
+- Monthly amortization estimator
+- FAQ
+- Property compare
+- Inquiry email notifications (SMTP adapter) and form rate limiting

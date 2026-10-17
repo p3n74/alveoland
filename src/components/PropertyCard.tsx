@@ -4,18 +4,16 @@ import Link from 'next/link'
 import type { CardData } from '@/lib/data'
 import { Arrow } from './Arrow'
 
-export function PropertyCard({ property }: { property: CardData }) {
+export const SUITE_CARD_SIZES = '(min-width: 1328px) 400px, (min-width: 700px) 50vw, 100vw'
+export const FEATURED_CARD_SIZES = '(min-width: 1328px) 310px, (min-width: 1100px) 25vw, (min-width: 640px) 50vw, 100vw'
+
+export function PropertyCard({ property, sizes = SUITE_CARD_SIZES }: { property: CardData; sizes?: string }) {
   const href = `/properties/${property.slug}`
   return (
     <article className="card">
       <Link href={href} className="card__media" tabIndex={-1} aria-hidden="true">
         {property.image ? (
-          <Image
-            src={property.image.src}
-            alt=""
-            fill
-            sizes="(min-width: 1100px) 33vw, (min-width: 700px) 50vw, 100vw"
-          />
+          <Image src={property.image.src} alt="" fill sizes={sizes} />
         ) : (
           <span className="name-frame">{property.name}</span>
         )}

@@ -1,7 +1,9 @@
 import type { CollectionConfig } from 'payload'
 
 import { anyone, isAdmin } from '../access'
-import { PROPERTY_TYPES, slugify } from '../lib/format'
+import { BALANCE_MODES, PROPERTY_STATUSES, PROPERTY_TYPES, slugify } from '../lib/format'
+
+const dayOnly = { date: { pickerAppearance: 'dayOnly' as const } }
 
 export const Properties: CollectionConfig = {
   slug: 'properties',
@@ -51,7 +53,12 @@ export const Properties: CollectionConfig = {
     {
       type: 'row',
       fields: [
-        { name: 'status', type: 'text', admin: { description: 'e.g. Pre-selling, Ready for occupancy' } },
+        {
+          name: 'status',
+          type: 'select',
+          options: PROPERTY_STATUSES.map(({ value, label }) => ({ value, label })),
+          admin: { description: 'Leave empty if the current status is not confirmed.' },
+        },
         { name: 'area', type: 'text', admin: { description: 'e.g. About 26–156 sqm' } },
       ],
     },
@@ -86,6 +93,65 @@ export const Properties: CollectionConfig = {
       type: 'upload',
       relationTo: 'media',
       hasMany: true,
+    },
+    {
+      type: 'collapsible',
+      label: 'Buying basics',
+      admin: { description: 'Empty fields show an “Ask me” link on the site instead of a value.' },
+      fields: [
+        {
+          type: 'row',
+          fields: [
+            { name: 'reservationFee', type: 'text', admin: { description: 'e.g. ₱50,000' } },
+            { name: 'targetTurnover', type: 'text', admin: { description: 'e.g. Q4 2029' } },
+            { name: 'termsAsOf', label: 'Terms as of', type: 'date', admin: dayOnly },
+          ],
+        },
+        {
+          name: 'paymentSchemes',
+          type: 'array',
+          labels: { singular: 'Payment scheme', plural: 'Payment schemes' },
+          fields: [
+            { name: 'label', type: 'text', required: true, admin: { description: 'e.g. Spot down payment' } },
+            {
+              type: 'row',
+              fields: [
+                { name: 'downPaymentPercent', label: 'Down payment %', type: 'number', min: 0, max: 100 },
+                { name: 'downPaymentMonths', label: 'Over (months)', type: 'number', min: 0 },
+                { name: 'balancePercent', label: 'Balance %', type: 'number', min: 0, max: 100 },
+                {
+                  name: 'balanceMode',
+                  type: 'select',
+                  options: BALANCE_MODES.map(({ value, label }) => ({ value, label })),
+                },
+              ],
+            },
+            { name: 'note', type: 'text' },
+          ],
+        },
+        {
+          name: 'unitTypes',
+          type: 'array',
+          labels: { singular: 'Unit type', plural: 'Unit types' },
+          fields: [
+            {
+              type: 'row',
+              fields: [
+                { name: 'label', type: 'text', required: true, admin: { description: 'e.g. 1 bedroom' } },
+                { name: 'areaRange', type: 'text', admin: { description: 'e.g. 52–60 sqm' } },
+                { name: 'priceFrom', type: 'text' },
+              ],
+            },
+          ],
+        },
+        {
+          name: 'location',
+          label: 'Location and landmarks',
+          type: 'textarea',
+        },
+        { name: 'mapUrl', type: 'text', admin: { description: 'Google Maps link' } },
+        { name: 'dhsudLtsNumber', label: 'DHSUD license to sell no.', type: 'text' },
+      ],
     },
     {
       name: 'featured',

@@ -3,7 +3,7 @@ import { getPayload } from 'payload'
 import { cache } from 'react'
 
 import type { Media, Property } from '@/payload-types'
-import { slugify, typeLabel } from './format'
+import { slugify, statusLabel, typeLabel } from './format'
 
 export const getPayloadClient = () => getPayload({ config })
 
@@ -40,7 +40,7 @@ export const getCredibility = cache(async () => {
     payload.find({ collection: 'awards', sort: '-year', limit: 50, depth: 0 }),
     payload.find({
       collection: 'testimonials',
-      where: { published: { equals: true } },
+      where: { and: [{ published: { equals: true } }, { consentOnFile: { equals: true } }] },
       limit: 50,
       depth: 0,
     }),
@@ -87,7 +87,7 @@ export function toCard(property: Property): CardData {
     citySlug: slugify(property.city),
     type: property.type,
     typeLabel: typeLabel(property.type),
-    status: property.status ?? '',
+    status: statusLabel(property.status, property.type),
     image: propertyFrames(property)[0] ?? null,
   }
 }

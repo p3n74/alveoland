@@ -21,7 +21,7 @@ Optional later: an SMTP adapter for inquiry emails (not wired yet; inquiries are
 
 ## Migrations
 
-Local development uses Payload's schema push (the dev server syncs tables automatically). Production does not push. Instead, `prodMigrations` in `src/payload.config.ts` runs any pending migration from `src/migrations` when the server starts, so a deploy applies them on its own.
+Schema push is off (`push: false` in `src/payload.config.ts`), so local and production databases both follow `src/migrations`. In production, `prodMigrations` runs any pending migration when the server starts, so a deploy applies them on its own.
 
 When you change a collection, global, or field:
 
@@ -31,7 +31,7 @@ pnpm payload migrate                       # apply it to your local database
 pnpm payload migrate:status                # check what has run
 ```
 
-Commit the migration files with the schema change. If the dev server asked about "dev mode" migrations, answer yes once; that only affects the local database.
+Review the generated SQL before applying. When a text field becomes a select, add an `UPDATE` that maps existing values first (see `20261016_235619_round2_buying_basics.ts`). Commit the migration files with the schema change.
 
 ## First admin and seed data
 
